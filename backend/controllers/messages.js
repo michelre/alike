@@ -67,10 +67,10 @@ module.exports = {
         /**
          * Récupération de l'utilisateur connecté afin de savoir si il est administrateur
          */
-        models.User.findByPrimary(userId).then((user) => {
+        models.User.findByPk(userId, {attributes: ['id']}).then((user) => {
             return models.Message.findAll({
                 order: [(order != null) ? order.split(':') : ['createdAt', 'ASC']],
-                attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
+                attributes: ['id'],
                 include: [
                     {
                         model: models.User,
@@ -84,7 +84,8 @@ module.exports = {
                 ]
             }).then((messages) => ({messages, isAdmin: user.get('isAdmin')}))
         }).then(function ({messages, isAdmin}) {
-            if (messages) {
+            res.status(200).json(messages)
+            /*if (messages) {
                 const jsonMessages = []
                 for (let i = 0; i < messages.length; i++) {
                     const jsonMessage = messages[i].toJSON();
@@ -98,7 +99,7 @@ module.exports = {
                 res.status(200).json(jsonMessages);
             } else {
                 res.status(404).json({ "error": "no messages found" });
-            }
+            }*/
         }).catch(function (err) {
             console.log(err);
             res.status(500).json({ 'error': 'invalid fields' });

@@ -30,7 +30,7 @@
         <main>
             <form name="inscription">
                 <div class="souspartie">
-                    <label for="fistname">Prénom *</label>
+                    <label for="firstname">Prénom *</label>
                     <input type="text" class="focus" id="firstname" pattern="^\D*$" required
                     placeholder="Renseignez votre prénom" name="firstname">
                 </div>
@@ -41,12 +41,12 @@
                 </div>
                 <div class="souspartie">
                     <label for="email">Email *</label>
-                    <input type="email" class="focus" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required
+                    <input type="email" class="focus" id="email" required
                     placeholder="Entrez une adresse mail valide" name="email">
                 </div>
                 <div class="souspartie">
                     <label for="password">Mot de passe *</label>
-                    <input type="password" class="focus" id="password" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required
+                    <input type="password" class="focus" id="password" required
                     placeholder="Renseignez votre mot de passe" name="password">
                 </div>
                 <button type="submit" id="inscription" class="focus">S'inscrire</button>

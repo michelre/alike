@@ -13,11 +13,10 @@ form.addEventListener('submit', (e) => {
             const password = e.target.password.value
         
 
-    axios.post("http://localhost:3008/api/signup", { email, password, firstName, lastName }).then((response) => {
-        localStorage.setItem( 'api-token', resp.data.token)    
-        if (resp.data.status === 'OK') {
-             window.location = 'index.html'// Redirige vers la liste des posts
-        }
+    axios.post("http://localhost:3008/api/users/register", { email, password, firstName, lastName }).then((resp) => {
+        localStorage.setItem( 'api-token', resp.data.token)
+        localStorage.setItem('user', JSON.stringify(resp.data.user));
+        window.location = 'index.html'// Redirige vers la liste des posts
     }, (err) => {
         alert("vous êtes déjà enregistré! Veuillez entrée avec votre email et votre mot de passe");
         window.location.href = 'login.html'

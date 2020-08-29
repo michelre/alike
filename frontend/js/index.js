@@ -5,7 +5,7 @@ const headers = {
 const getMessages = () => axios.get("http://localhost:3008/api/messages", headers).then((data) => {
     listMessages(data.data); //appel de la fonction d'affichage des messages
 }, (err) => {
-    window.location.href = 'login.html'
+    //window.location.href = 'login.html'
 });
 
 moment.locale('fr')
