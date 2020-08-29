@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <!DOCTYPE html>
+    <html lang="fr">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+          <link rel="shortcut icon" type="image/png" href="img/favicon-groupomania.png">
+          <title>Page d'un article</title>
+          <meta name="description" content="page d'un article d'un des employé de Groupomania">
+          <link rel="stylesheet" href="css/style.css">
+          <script src="https://kit.fontawesome.com/9376b337f5.js" crossorigin="anonymous"></script>
+      </head>
+        <body>
+        <header>
+                <nav class="flexbox">
+                    <ul>
+                        <li class="logo__header">
+                            <a href="news-feed.html" class="focus">
+                                <h1>
+                                    <img src="img/logo-groupomania.png" alt="Logo de Groupomania"/>
+                                </h1>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="news-feed.html" class="focus" id="feed">Fil d'actu<i class="fas fa-home"></i></i></a>
+                        </li>
+                        <li>
+                            <a href="my-page.html" class="focus" id="userimg">Ma page<i class="far fa-newspaper"></i></a>
+                        </li>
+                        <li>
+                            <a href="new-post.html" class="focus" id="newpost">Nouveau post<i class="fas fa-pen"></i></a>
+                        </li>
+                        <li>
+                            <a href="profil.html" class="focus" id="profil">Profil<i class="fas fa-user"></i></a>
+                        </li>
+                        <li>
+                            <a href="index.html" class="focus" id="logout">Se déconnecter<i class="fas fa-sign-out-alt"></i></a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+            <main>
+                <article id="singlepost" class="post conteneur__demie">
+                    <img id="imagearticle" class="post-image" alt="Image de l'article">
+                    <h2><span id="titrearticle"></span></h2>
+                    <div class="body-post">
+                        <span id="contenuarticle"></span>
+                    </div>
+                    <form name="modification">
+                        <button type="submit" id="modification" class="focus" >Modifier</button>
+                        <button type="submit" id="supression" class="focus">Supprimer</button>
+                    </form>
+                </article>
+            </main>
+
+
+
+
+            <script src="node_modules/axios/dist/axios.min.js"></script>
+
+
+
+
+            <script src="js/singlpost.js" type="application/javascript"></script>
+        </body>
+    </html>
