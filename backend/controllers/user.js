@@ -142,32 +142,33 @@ module.exports = {
     updateUserProfile: function (req, res) {
         const headerAuth = req.headers['authorization'];
         const userId = jwtUtils.getUserId(headerAuth);
-    //params
+        //params
         const firstName = req.body.firstName;
         const lastName = req.body.lastName;
         const email = req.body.email;
-        const bio      = req.body.bio;
 
-        
-        models.User.findByPrimary(userId).then(function (user) {
+
+        models.User.findOne({
+            attributes: ['firstname'],
+            where: {firstname: firstName}
+        })).then(function (user) {
             if (user) {
                 user.update({
                     firstName,
                     lastName,
-                    email,
-                    bio
+                    email
                 }).then(() => {
                     res.status(200).json(user);
                 }).catch(() => {
-                    res.status(500).json({ 'error': 'invalid fields ' });
+                    res.status(500).json({'error': 'invalid fields '});
                 })
 
             } else {
-                res.status(404).json({ "error": "no user found" });
+                res.status(404).json({"error": "no user found"});
             }
         }).catch(function (err) {
             console.log(err);
-            res.status(500).json({ 'error': 'invalid fields ' });
+            res.status(500).json({'error': 'invalid fields '});
         })
     },
     //
