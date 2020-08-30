@@ -18,44 +18,44 @@ module.exports = {
             return res.status(400).json({ 'error': 'missing parameters' });
         }
 
-        asyncLib.waterfall([
-            function (done) {
-                models.User.findById(userId)
-                    .then(function (userFound) {
-                        done(null, userFound);
-                    })
-                    .catch(function (err) {
-                        console.log(err)
-                        return res.status(500).json({ 'error': 'unable to verify user' });
-                    });
-            },
-            function (userFound, done) {
-                if (userFound) {
+        createMessage: function (req, res) {
+        const headerAuth = req.headers['authorization'];
+        const userId = jwtUtils.getUserId(headerAuth);
 
-                    models.Message.create({
-                        title: title,
-                        content: content,
-                        likes: 0,
-                        UserId: userFound.id,
-                        attachment: req.file ? req.file.filename : null
-                    })
-                        .then(function (newMessage) {
-                            done(newMessage);
-                        });
+        const title = req.body.title;
+        const content = req.body.content;
 
-                } else {
-                    res.status(400).json({ 'error': 'user not found' });
+        // si le champ title ou le champ content sont vide = erreur !
+        if (title == null || content == null) {
+            return res.status(400).json({ 'error': 'missing parameters' });
+        }
+
+        models.User.findOne({
+            attributes: ['email'],
+            where: {email: email}
+        })
+            .then(function (userFound) {
+                if (!userFound) {
+                    return res.status(400).json({'error': 'user not found'});
                 }
-            }
-        ], function (newMessage) {
-            if (newMessage) {
-                return res.status(201).json(newMessage);
-            } else {
-                return res.status(500).json({ 'error': 'cannot post message' });
-            }
-        });
-    },
+                models.Message.create({
+                    title: title,
+                    content: content,
+                    likes: 0,
+                    UserId: userFound.id,
+                    attachment: req.file ? req.file.filename : null
+                })
+               .then((newMessage) => {
+                        return res.status(201).json(newMessage);
+                    }).catch(() => {
+                        return res.status(500).json({'error': 'cannot post message'});
+                    })
 
+            })
+            .catch(function (err) {
+                return res.status(500).json({'error': 'unable to verify user'});
+            });
+    },
 
     listMessages: function (req, res) {
         const userId = jwtUtils.getUserId(req.headers['authorization']);
