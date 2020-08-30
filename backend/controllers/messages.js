@@ -1,6 +1,5 @@
 // Imports
 const models = require('../models');
-const asyncLib = require('async');
 const jwtUtils = require('../utils/jwt.utils');
 const fs = require('fs').promises
 
@@ -18,22 +17,7 @@ module.exports = {
             return res.status(400).json({ 'error': 'missing parameters' });
         }
 
-        createMessage: function (req, res) {
-        const headerAuth = req.headers['authorization'];
-        const userId = jwtUtils.getUserId(headerAuth);
-
-        const title = req.body.title;
-        const content = req.body.content;
-
-        // si le champ title ou le champ content sont vide = erreur !
-        if (title == null || content == null) {
-            return res.status(400).json({ 'error': 'missing parameters' });
-        }
-
-        models.User.findOne({
-            attributes: ['email'],
-            where: {email: email}
-        })
+        models.User.findByPk(userId)
             .then(function (userFound) {
                 if (!userFound) {
                     return res.status(400).json({'error': 'user not found'});
@@ -70,36 +54,23 @@ module.exports = {
         models.User.findByPk(userId, {attributes: ['id']}).then((user) => {
             return models.Message.findAll({
                 order: [(order != null) ? order.split(':') : ['createdAt', 'ASC']],
-                attributes: ['id'],
                 include: [
                     {
                         model: models.User,
                         as: 'User',
-                        attributes: ['firstName', 'lastName'],
+                        attributes: ['id', 'firstName', 'lastName', 'isAdmin'],
                     },
                     {
                         model: models.Like,
                         as: 'Likes'
                     }
                 ]
-            }).then((messages) => ({messages, isAdmin: user.get('isAdmin')}))
+            }).then((messages) => ({messages: messages, isAdmin: user.get('isAdmin')}))
         }).then(function ({messages, isAdmin}) {
-            res.status(200).json(messages)
-            /*if (messages) {
-                const jsonMessages = []
-                for (let i = 0; i < messages.length; i++) {
-                    const jsonMessage = messages[i].toJSON();
-                    //Si le message concerne l'utilisateur connecté, on ajoute un champ modifiable
-                    jsonMessage['modifiable'] = userId === jsonMessage.UserId || isAdmin
-                    jsonMessage['liked'] = jsonMessage.Likes.find((like) => {
-                        return like.UserId === userId && like.isLike > 0
-                    })
-                    jsonMessages.push(jsonMessage)
-                }
-                res.status(200).json(jsonMessages);
-            } else {
-                res.status(404).json({ "error": "no messages found" });
-            }*/
+            //On ajoute un attribut modifiable si le message appartient à l'utilisateur ou à l'admin
+            const m = messages
+                .map(m => ({...m.dataValues, modifiable: isAdmin || m.dataValues.User.id === userId}))
+            res.status(200).json(m)
         }).catch(function (err) {
             console.log(err);
             res.status(500).json({ 'error': 'invalid fields' });
@@ -148,7 +119,7 @@ module.exports = {
     deletePost: function (req, res) {
         const id = req.params.id
 
-        models.Message.findByPrimary(id).then((message) => {
+        models.Message.findByPk(id).then((message) => {
             const attachment = message.get('attachment');
             let response = null
             if(!attachment){

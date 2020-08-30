@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var Like = sequelize.define('Like', {
-    /*messageId: {
+    messageId: {
       type: DataTypes.INTEGER,
       references: {
         model: 'Message',
@@ -14,30 +14,18 @@ module.exports = (sequelize, DataTypes) => {
         model: 'User',
         key: 'id'
       }
-    },*/
-    isLike: DataTypes.INTEGER
+    },
   }, {});
   Like.associate = function(models) {
-    // associations can be defined here
 
-    /*models.User.belongsToMany(models.Message, {
+    models.User.belongsToMany(models.Message, {
       through: models.Like,
-      foreignKey: 'userId',
-      otherKey: 'messageId',
-    });*/
-
-    models.Like.hasMany(models.User, {foreignKey: 'userId'});
-    models.Like.hasMany(models.Message, {foreignKey: 'messageId'});
-
-    /*models.Like.belongsTo(models.User, {
-      foreignKey: 'userId',
-      as: 'user',
+      onDelete: 'CASCADE'
     });
 
-    models.Like.belongsTo(models.Message, {
-      foreignKey: 'messageId',
-      as: 'message',
-    });*/
+    models.Message.belongsToMany(models.User, {
+      through: models.Like,
+    });
   };
   return Like;
 };

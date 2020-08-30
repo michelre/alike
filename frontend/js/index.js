@@ -14,7 +14,7 @@ moment.locale('fr')
 const listMessages = (messages) => {
     for (let i in messages) {
 
-        let nbLikes = messages[i].likes;
+        let nbLikes = messages[i].Likes.length;
 
 		//Création de la section accueillant la liste des posts
 		let listPost = document.createElement("section")
@@ -37,10 +37,10 @@ const listMessages = (messages) => {
 
 		// post header
 		let postPoster = document.createElement("div"); 
-		postPoster.settAttribute("class", "poster");
+		postPoster.setAttribute("class", "poster");
 		// user
 		let postUserName = document.createElement("span");
-		postUserName.settAttribute("class", "user-name");
+		postUserName.setAttribute("class", "user-name");
 		postUserName.innerHTML = messages[i].User.firstName + ' ' + messages[i].User.lastName + ' - ' + moment(messages[i].createdAt).format('LLL')+ ' a poster : ';
 		postPost.appendChild(postPoster);
 		postPoster.appendChild(postUserName);
@@ -101,14 +101,11 @@ const listMessages = (messages) => {
 
         let likeOrDislike = messages[i].liked ? 'dislike' : 'like'
 
+		const btnLikes = document.querySelector('.fa-heart')
         btnLikes.addEventListener('click', () => {
             axios.post(`http://localhost:3008/api/messages/${messages[i].id}/action/${likeOrDislike}`, {}, headers).then((resp) => {
-                if (likeOrDislike === 'like')
-                    nbLikes += 1
-                else
-                    nbLikes -= 1
-                spanLikes.innerHTML = nbLikes + " J'aime";
-                likeOrDislike = likeOrDislike === 'like' ? 'dislike' : 'like'
+				nbLikes = resp.data.Likes.length
+				postNbLikes.innerHTML = nbLikes
             })
         })
 		// effacer
@@ -121,8 +118,7 @@ const listMessages = (messages) => {
             postDeleteBtn.addEventListener('click', () => {
                 axios.delete(`http://localhost:3008/api/messages/delete/${messages[i].id}`, headers)
                     .then((resp) => {
-                        parent.innerHTML = ''
-                        getMessages()
+						postBlock.remove();
                     })
             })
         }
@@ -133,8 +129,8 @@ const listMessages = (messages) => {
             PostModifiableLink.href = `modifypost.html?id=${messages[i].id}`
             postAction.appendChild(PostModifiableLink)
             const postModifyBtn = document.createElement('i')
-            PostModifiableLink.appendChild(modifyBtn);
-            postModifyBtn.className = 'fas fa-pencil-alt'
+			postModifyBtn.className = 'fas fa-pencil-alt'
+            PostModifiableLink.appendChild(postModifyBtn);
         }
 
 	}
