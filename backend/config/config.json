@@ -1,23 +1,24 @@
 {
-  "development": {
-    "username": "root",
-    "password":  "TXZk85OjjzjRqrOk",
-    "database": "eploc",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "test": {
-    "username": "root",
-    "password":  "TXZk85OjjzjRqrOk",
-    "database": "eploc",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "root",
-    "password":  "TXZk85OjjzjRqrOk",
-    "database": "eploc",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+  {
+    "development": {
+      "username": "root",
+      "password":  null,
+      "database": "groupomania",
+      "host": "127.0.0.1",
+      "dialect": "mysql"
+    },
+    "test": {
+      "username": "root",
+      "password":  null,
+      "database": "groupomania",
+      "host": "127.0.0.1",
+      "dialect": "mysql"
+    },
+    "production": {
+      "username": "root",
+      "password":  null,
+      "database": "groupomania",
+      "host": "127.0.0.1",
+      "dialect": "mysql"
+    }
   }
-}
